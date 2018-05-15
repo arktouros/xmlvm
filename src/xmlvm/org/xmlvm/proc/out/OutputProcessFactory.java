@@ -80,6 +80,8 @@ public class OutputProcessFactory {
             return new GenWrappersOutputProcess(arguments, COutputProcess.class);
         case OBJC:
             return new ObjectiveCOutputProcess(arguments);
+        case WINOBJC:
+            return new ObjectiveCOutputProcess(arguments);
         case QOOXDOO:
             return new QooxdooOutputProcess(arguments);
         case IPHONE:

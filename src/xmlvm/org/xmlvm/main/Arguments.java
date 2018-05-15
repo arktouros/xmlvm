@@ -111,7 +111,7 @@ public class Arguments {
     private static final String[] shortUsage                       = {
             "Usage: ",
             "xmlvm [--in=<path> [--out=<dir>]]", "      [--deps=<dep1,dep2,...>]",
-            "      [--target=[xmlvm|dexmlvm|jvm|clr|dfa|class|exe|dex|js|java|c|python|objc|iphone|qooxdoo|vtable|webos|csharp]]",
+            "      [--target=[xmlvm|dexmlvm|jvm|clr|dfa|class|exe|dex|js|java|c|python|objc|iphone|qooxdoo|vtable|webos|csharp|winobjc]]",
             "      [--skeleton=<type>]", "      [--lib=<name>", "      [--app-name=<app-name>]",
             "      [--resource=<path>]", "      [--qx-main=<main-class> [--qx-debug]]",
             "      [--debug=[none|error|warning|all]]", "      [--version] [--help]" };
@@ -143,6 +143,7 @@ public class Arguments {
             "    vtable           Vtable calculation (pre-step for e.g. C generation)",
             "    webos            WebOS JavaScript Project",
             "    csharp           C# source code",
+            "    winobjc          Objective C source code, optimized for Microsoft's WinObjC",
             "",
             " --deps=<dep1, ...>  Additional dependencies such as libraries your app is depending on.",
             "                     Only the classes your app is depending on are actually cross-compiled.",

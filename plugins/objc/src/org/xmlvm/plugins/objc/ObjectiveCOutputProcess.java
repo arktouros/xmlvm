@@ -20,22 +20,23 @@
 
 package org.xmlvm.plugins.objc;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.xmlvm.main.Arguments;
+import org.xmlvm.main.Targets;
 import org.xmlvm.proc.BundlePhase1;
 import org.xmlvm.proc.BundlePhase2;
 import org.xmlvm.proc.XmlvmProcessImpl;
 import org.xmlvm.proc.XmlvmResource;
-import org.xmlvm.proc.XsltRunner;
 import org.xmlvm.proc.XmlvmResource.Type;
+import org.xmlvm.proc.XsltRunner;
 import org.xmlvm.proc.out.OutputFile;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
 public class ObjectiveCOutputProcess extends XmlvmProcessImpl {
     private static final String M_EXTENSION = ".m";
@@ -98,8 +99,9 @@ public class ObjectiveCOutputProcess extends XmlvmProcessImpl {
         for (String i : getTypesForHeader(doc)) {
             headerBuffer.append("@class " + i + ";\n");
         }
+        String winobjc = (arguments.option_target() == Targets.WINOBJC) ? "true" : "false";
         OutputFile headerFile = XsltRunner.runXSLT("xmlvm2objc.xsl", doc, new String[][] {
-                { "pass", "emitHeader" }, { "header", headerFileName } });
+                { "pass", "emitHeader" }, { "header", headerFileName }, { "winobjc", winobjc }});
         headerFile.setData(headerBuffer.toString() + headerFile.getDataAsString());
         headerFile.setFileName(headerFileName);
 
@@ -110,9 +112,8 @@ public class ObjectiveCOutputProcess extends XmlvmProcessImpl {
                 mBuffer.append("#import \"" + i + ".h\"\n");
             }
         }
-
         OutputFile mFile = XsltRunner.runXSLT("xmlvm2objc.xsl", doc, new String[][] {
-                { "pass", "emitImplementation" }, { "header", headerFileName } });
+                { "pass", "emitImplementation" }, { "header", headerFileName } , { "winobjc", winobjc }});
         mFile.setData(mBuffer.toString() + mFile.getDataAsString());
         mFile.setFileName(mFileName);
 
