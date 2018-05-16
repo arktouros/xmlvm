@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
           </xsl:call-template>
           <xsl:text> </xsl:text>
           <xsl:value-of select="vm:fixname(@name)"/>
-          <xsl:text>_</xsl:text>
+          <xsl:text>$</xsl:text>
           <xsl:value-of select="$classname"/>
           <xsl:text>;
 </xsl:text>
@@ -133,29 +133,28 @@ int main(int argc, char* argv[])
 </xsl:text>
         <xsl:if test="$winobjc = 'true'">
           <xsl:for-each select="vm:field[not(@isStatic = 'true')]">
-            <xsl:text>- (</xsl:text>
             <xsl:call-template name="emitType">
               <xsl:with-param name="type" select="@type"/>
             </xsl:call-template>
-            <xsl:text>) get_</xsl:text>
+            <xsl:text> _mrefGet_</xsl:text>
             <xsl:value-of select="vm:fixname(@name)"/>
-            <xsl:text>_</xsl:text>
+            <xsl:text>$</xsl:text>
             <xsl:value-of select="$classname"/>
-            <xsl:text>;
+            <xsl:text>(id container);
 </xsl:text>
           </xsl:for-each>
           <xsl:for-each select="vm:field[not(@isStatic = 'true')]">
-            <xsl:text>- (void) set_</xsl:text>
+            <xsl:text>void _mrefSet_</xsl:text>
             <xsl:value-of select="vm:fixname(@name)"/>
-            <xsl:text>_</xsl:text>
+            <xsl:text>$</xsl:text>
             <xsl:value-of select="$classname"/>
-            <xsl:text>:(</xsl:text>
+            <xsl:text>(id container, </xsl:text>
             <xsl:call-template name="emitType">
               <xsl:with-param name="type" select="@type"/>
             </xsl:call-template>
-            <xsl:text>) </xsl:text>
+            <xsl:text> </xsl:text>
             <xsl:value-of select="vm:fixname(@name)"/>
-            <xsl:text>;
+            <xsl:text>);
 </xsl:text>
           </xsl:for-each>
         </xsl:if>
@@ -326,7 +325,7 @@ int main(int argc, char* argv[])
       <xsl:for-each select="vm:field[not(@isStatic = 'true') and vm:isObjectRef(@type)]">
         <xsl:text>    </xsl:text>
         <xsl:value-of select="vm:fixname(@name)"/>
-        <xsl:text>_</xsl:text>
+        <xsl:text>$</xsl:text>
         <xsl:value-of select="$classname"/>
         <xsl:text> = (id) JAVA_NULL;
 </xsl:text>
@@ -348,7 +347,7 @@ int main(int argc, char* argv[])
       <xsl:for-each select="vm:field[not(@isStatic = 'true') and vm:isObjectRef(@type) and                        not(@isSynthetic = 'true' and starts-with(@name, 'this$'))]">
         <xsl:text>    [</xsl:text>
         <xsl:value-of select="vm:fixname(@name)"/>
-        <xsl:text>_</xsl:text>
+        <xsl:text>$</xsl:text>
         <xsl:value-of select="$classname"/>
         <xsl:text> release];
 </xsl:text>
@@ -359,18 +358,21 @@ int main(int argc, char* argv[])
 </xsl:text>
       <xsl:if test="$winobjc = 'true'">
         <xsl:for-each select="vm:field[not(@isStatic = 'true')]">
-          <xsl:text>- (</xsl:text>
           <xsl:call-template name="emitType">
             <xsl:with-param name="type" select="@type"/>
           </xsl:call-template>
-          <xsl:text>) get_</xsl:text>
+          <xsl:text> _mrefGet_</xsl:text>
           <xsl:value-of select="vm:fixname(@name)"/>
-          <xsl:text>_</xsl:text>
+          <xsl:text>$</xsl:text>
           <xsl:value-of select="$classname"/>
-          <xsl:text>{
-    return self-&gt;</xsl:text>
+          <xsl:text>(id container) {
+    return ((</xsl:text>
+          <xsl:call-template name="emitType">
+            <xsl:with-param name="type" select="$classname"/>
+          </xsl:call-template>
+          <xsl:text>) container)-&gt;</xsl:text>
           <xsl:value-of select="vm:fixname(@name)"/>
-          <xsl:text>_</xsl:text>
+          <xsl:text>$</xsl:text>
           <xsl:value-of select="$classname"/>
           <xsl:text>;
 }
@@ -378,20 +380,24 @@ int main(int argc, char* argv[])
 </xsl:text>
         </xsl:for-each>
         <xsl:for-each select="vm:field[not(@isStatic = 'true')]">
-          <xsl:text>- (void) set_</xsl:text>
+          <xsl:text>void _mrefSet_</xsl:text>
           <xsl:value-of select="vm:fixname(@name)"/>
-          <xsl:text>_</xsl:text>
+          <xsl:text>$</xsl:text>
           <xsl:value-of select="$classname"/>
-          <xsl:text>:(</xsl:text>
+          <xsl:text>(id container, </xsl:text>
           <xsl:call-template name="emitType">
             <xsl:with-param name="type" select="@type"/>
           </xsl:call-template>
-          <xsl:text>) </xsl:text>
+          <xsl:text> </xsl:text>
           <xsl:value-of select="vm:fixname(@name)"/>
-          <xsl:text>{
-    self-&gt;</xsl:text>
+          <xsl:text>) {
+    ((</xsl:text>
+          <xsl:call-template name="emitType">
+            <xsl:with-param name="type" select="$classname"/>
+          </xsl:call-template>
+          <xsl:text>) container)-&gt;</xsl:text>
           <xsl:value-of select="vm:fixname(@name)"/>
-          <xsl:text>_</xsl:text>
+          <xsl:text>$</xsl:text>
           <xsl:value-of select="$classname"/>
           <xsl:text> = </xsl:text>
           <xsl:value-of select="vm:fixname(@name)"/>
@@ -2553,25 +2559,22 @@ int main(int argc, char* argv[])
     <xsl:value-of select="@vx"/>
     <xsl:value-of select="$m"/>
     <xsl:text> = </xsl:text>
-    <xsl:if test="$winobjc = 'true'">
-      <xsl:text>[</xsl:text>
-    </xsl:if>
-    <xsl:text>((</xsl:text>
-    <xsl:call-template name="emitType">
-      <xsl:with-param name="type" select="@class-type"/>
-    </xsl:call-template>
-    <xsl:text>) _r</xsl:text>
-    <xsl:value-of select="@vy"/>
     <xsl:choose>
       <xsl:when test="$winobjc = 'true'">
-        <xsl:text>.o) get_</xsl:text>
+        <xsl:text>_mrefGet_</xsl:text>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:text>((</xsl:text>
+        <xsl:call-template name="emitType">
+          <xsl:with-param name="type" select="@class-type"/>
+        </xsl:call-template>
+        <xsl:text>) _r</xsl:text>
+        <xsl:value-of select="@vy"/>
         <xsl:text>.o)-&gt;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:value-of select="vm:fixname(@member-name)"/>
-    <xsl:text>_</xsl:text>
+    <xsl:text>$</xsl:text>
     <xsl:choose>
       <xsl:when test="@kind = 'field'">
         <xsl:value-of select="vm:fixname(@class-type)"/>
@@ -2581,7 +2584,9 @@ int main(int argc, char* argv[])
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="$winobjc = 'true'">
-      <xsl:text>]</xsl:text>
+      <xsl:text>(_r</xsl:text>
+      <xsl:value-of select="@vy"/>
+      <xsl:text>.o)</xsl:text>
     </xsl:if>
     <xsl:text>;
 </xsl:text>
@@ -2596,25 +2601,22 @@ int main(int argc, char* argv[])
     <xsl:value-of select="@vx"/>
     <xsl:value-of select="$m"/>
     <xsl:text> = </xsl:text>
-    <xsl:if test="$winobjc = 'true'">
-      <xsl:text>[</xsl:text>
-    </xsl:if>
-    <xsl:text>((</xsl:text>
-    <xsl:call-template name="emitType">
-      <xsl:with-param name="type" select="@class-type"/>
-    </xsl:call-template>
-    <xsl:text>) _r</xsl:text>
-    <xsl:value-of select="@vy"/>
     <xsl:choose>
       <xsl:when test="$winobjc = 'true'">
-        <xsl:text>.o) get_</xsl:text>
+        <xsl:text>_mrefGet_</xsl:text>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:text>((</xsl:text>
+        <xsl:call-template name="emitType">
+          <xsl:with-param name="type" select="@class-type"/>
+        </xsl:call-template>
+        <xsl:text>) _r</xsl:text>
+        <xsl:value-of select="@vy"/>
         <xsl:text>.o)-&gt;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:value-of select="vm:fixname(@member-name)"/>
-    <xsl:text>_</xsl:text>
+    <xsl:text>$</xsl:text>
     <xsl:choose>
       <xsl:when test="@kind = 'field'">
         <xsl:value-of select="vm:fixname(@class-type)"/>
@@ -2624,7 +2626,9 @@ int main(int argc, char* argv[])
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="$winobjc = 'true'">
-      <xsl:text>]</xsl:text>
+      <xsl:text>(_r</xsl:text>
+      <xsl:value-of select="@vy"/>
+      <xsl:text>.o)</xsl:text>
     </xsl:if>
     <xsl:text>;
 </xsl:text>
@@ -2636,25 +2640,22 @@ int main(int argc, char* argv[])
       </xsl:call-template>
     </xsl:variable>
     <xsl:text>    </xsl:text>
-    <xsl:if test="$winobjc = 'true'">
-      <xsl:text>[</xsl:text>
-    </xsl:if>
-    <xsl:text>((</xsl:text>
-    <xsl:call-template name="emitType">
-      <xsl:with-param name="type" select="@class-type"/>
-    </xsl:call-template>
-    <xsl:text>) _r</xsl:text>
-    <xsl:value-of select="@vy"/>
     <xsl:choose>
       <xsl:when test="$winobjc = 'true'">
-        <xsl:text>.o) set_</xsl:text>
+        <xsl:text>_mrefSet_</xsl:text>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:text>((</xsl:text>
+        <xsl:call-template name="emitType">
+          <xsl:with-param name="type" select="@class-type"/>
+        </xsl:call-template>
+        <xsl:text>) _r</xsl:text>
+        <xsl:value-of select="@vy"/>
         <xsl:text>.o)-&gt;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:value-of select="vm:fixname(@member-name)"/>
-    <xsl:text>_</xsl:text>
+    <xsl:text>$</xsl:text>
     <xsl:choose>
       <xsl:when test="@kind = 'field'">
         <xsl:value-of select="vm:fixname(@class-type)"/>
@@ -2665,7 +2666,9 @@ int main(int argc, char* argv[])
     </xsl:choose>
     <xsl:choose>
       <xsl:when test="$winobjc = 'true'">
-        <xsl:text>: </xsl:text>
+        <xsl:text>(_r</xsl:text>
+        <xsl:value-of select="@vy"/>
+        <xsl:text>.o, </xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text> = </xsl:text>
@@ -2675,7 +2678,7 @@ int main(int argc, char* argv[])
     <xsl:value-of select="@vx"/>
     <xsl:value-of select="$m"/>
     <xsl:if test="$winobjc = 'true'">
-      <xsl:text>]</xsl:text>
+      <xsl:text>)</xsl:text>
     </xsl:if>
     <xsl:text>;
 </xsl:text>
@@ -2710,26 +2713,23 @@ int main(int argc, char* argv[])
         <xsl:with-param name="type" select="@member-type"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:text>    </xsl:text>
-    <xsl:if test="$winobjc = 'true'">
-      <xsl:text>[</xsl:text>
-    </xsl:if>
-    <xsl:text>[((</xsl:text>
-    <xsl:call-template name="emitType">
-      <xsl:with-param name="type" select="@class-type"/>
-    </xsl:call-template>
-    <xsl:text>) _r</xsl:text>
-    <xsl:value-of select="@vy"/>
+    <xsl:text>    [</xsl:text>
     <xsl:choose>
       <xsl:when test="$winobjc = 'true'">
-        <xsl:text>.o)  get_</xsl:text>
+        <xsl:text>_mrefGet_</xsl:text>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:text>((</xsl:text>
+        <xsl:call-template name="emitType">
+          <xsl:with-param name="type" select="@class-type"/>
+        </xsl:call-template>
+        <xsl:text>) _r</xsl:text>
+        <xsl:value-of select="@vy"/>
         <xsl:text>.o)-&gt;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:value-of select="vm:fixname(@member-name)"/>
-    <xsl:text>_</xsl:text>
+    <xsl:text>$</xsl:text>
     <xsl:choose>
       <xsl:when test="@kind = 'field'">
         <xsl:value-of select="vm:fixname(@class-type)"/>
@@ -2739,7 +2739,9 @@ int main(int argc, char* argv[])
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="$winobjc = 'true'">
-      <xsl:text>]</xsl:text>
+      <xsl:text>(_r</xsl:text>
+      <xsl:value-of select="@vy"/>
+      <xsl:text>.o)</xsl:text>
     </xsl:if>
     <xsl:text> release];
 </xsl:text>
@@ -2751,25 +2753,22 @@ int main(int argc, char* argv[])
       </xsl:call-template>
     </xsl:variable>
     <xsl:text>    </xsl:text>
-    <xsl:if test="$winobjc = 'true'">
-      <xsl:text>[</xsl:text>
-    </xsl:if>
-    <xsl:text>((</xsl:text>
-    <xsl:call-template name="emitType">
-      <xsl:with-param name="type" select="@class-type"/>
-    </xsl:call-template>
-    <xsl:text>) _r</xsl:text>
-    <xsl:value-of select="@vy"/>
     <xsl:choose>
       <xsl:when test="$winobjc = 'true'">
-        <xsl:text>.o)  set_</xsl:text>
+        <xsl:text>_mrefSet_</xsl:text>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:text>((</xsl:text>
+        <xsl:call-template name="emitType">
+          <xsl:with-param name="type" select="@class-type"/>
+        </xsl:call-template>
+        <xsl:text>) _r</xsl:text>
+        <xsl:value-of select="@vy"/>
         <xsl:text>.o)-&gt;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:value-of select="vm:fixname(@member-name)"/>
-    <xsl:text>_</xsl:text>
+    <xsl:text>$</xsl:text>
     <xsl:choose>
       <xsl:when test="@kind = 'field'">
         <xsl:value-of select="vm:fixname(@class-type)"/>
@@ -2780,7 +2779,9 @@ int main(int argc, char* argv[])
     </xsl:choose>
     <xsl:choose>
       <xsl:when test="$winobjc = 'true'">
-        <xsl:text>: </xsl:text>
+        <xsl:text>(_r</xsl:text>
+        <xsl:value-of select="@vy"/>
+        <xsl:text>.o, </xsl:text>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text> = </xsl:text>
@@ -2790,7 +2791,7 @@ int main(int argc, char* argv[])
     <xsl:value-of select="@vx"/>
     <xsl:value-of select="$m"/>
     <xsl:if test="$winobjc = 'true'">
-      <xsl:text>]</xsl:text>
+      <xsl:text>)</xsl:text>
     </xsl:if>
     <xsl:text>;
 </xsl:text>
