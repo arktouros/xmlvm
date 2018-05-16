@@ -2843,30 +2843,25 @@ int main(int argc, char* argv[])
         </xsl:call-template>
         <xsl:text> = </xsl:text>
         <xsl:value-of select="@value"/>
-        <xs:text>;
-        </xs:text>
+        <xsl:text>;
+</xsl:text>
     </xsl:template>
-
-
     <xsl:template match="dex:const-string">
         <xsl:text>    _r</xsl:text>
         <xsl:value-of select="@vx"/>
         <xsl:text>.o = </xsl:text>
         <xsl:value-of select="vm:escapeString(@value)"/>
-        <xs:text>;
-        </xs:text>
+        <xsl:text>;
+</xsl:text>
     </xsl:template>
-
-
     <xsl:template match="dex:const-class">
         <xsl:text>    _r</xsl:text>
         <xsl:value-of select="@vx"/>
         <xsl:text>.o = [</xsl:text>
         <xsl:value-of select="vm:fixname(@value)"/>
-        <xs:text> getClass__];
-        </xs:text>
+        <xsl:text> getClass__];
+</xsl:text>
     </xsl:template>
-
     <xsl:template match="dex:float-to-long">
         <xsl:text>    _r</xsl:text>
         <xsl:value-of select="@vx"/>
