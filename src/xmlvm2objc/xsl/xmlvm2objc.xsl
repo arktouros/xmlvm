@@ -161,7 +161,7 @@ int main(int argc, char* argv[])
             </xsl:call-template>
             <xsl:text> </xsl:text>
             <xsl:value-of select="vm:fixname(@name)"/>
-            <xsl:text>$field;
+            <xsl:text>_field;
 </xsl:text>
         </xsl:for-each>
 
@@ -435,7 +435,7 @@ int main(int argc, char* argv[])
     <xsl:for-each select="vm:field[not(@isStatic = 'true')]">
     <xsl:text>@synthesize </xsl:text>
     <xsl:value-of select="vm:fixname(@name)"/>
-    <xsl:text>$field = </xsl:text>
+    <xsl:text>_field = </xsl:text>
     <xsl:value-of select="vm:fixname(@name)"/>
     <xsl:text>_</xsl:text>
     <xsl:value-of select="vm:fixname($classname)"/>
@@ -2829,7 +2829,7 @@ int main(int argc, char* argv[])
       <xsl:value-of select="vm:fixname(@class-type)"/>
       <xsl:text>, </xsl:text>
       <xsl:value-of select="vm:fixname(@member-name)"/>
-      <xsl:text>$field)</xsl:text>
+      <xsl:text>_field)</xsl:text>
     </xsl:when>
     <xsl:otherwise>
       <xsl:text>((</xsl:text>
@@ -2878,7 +2878,7 @@ int main(int argc, char* argv[])
       <xsl:value-of select="vm:fixname(@class-type)"/>
       <xsl:text>, </xsl:text>
       <xsl:value-of select="vm:fixname(@member-name)"/>
-      <xsl:text>$field)</xsl:text>
+      <xsl:text>_field)</xsl:text>
     </xsl:when>
     <xsl:otherwise>
       <xsl:text>((</xsl:text>
@@ -2926,7 +2926,7 @@ int main(int argc, char* argv[])
       <xsl:call-template name="CapitalizeFirst">
         <xsl:with-param name="string" select="vm:fixname(@member-name)"/>
       </xsl:call-template>
-      <xsl:text>$field:, </xsl:text>
+      <xsl:text>_field:, </xsl:text>
       <xsl:text>_r</xsl:text>
       <xsl:value-of select="@vx"/>
       <xsl:value-of select="$m"/>
@@ -3008,7 +3008,7 @@ int main(int argc, char* argv[])
       <xsl:value-of select="vm:fixname(@class-type)"/>
       <xsl:text>, </xsl:text>
       <xsl:value-of select="vm:fixname(@member-name)"/>
-      <xsl:text>$field)</xsl:text>
+      <xsl:text>_field)</xsl:text>
     </xsl:when>
     <xsl:otherwise>
       <xsl:text>((</xsl:text>
@@ -3055,7 +3055,7 @@ int main(int argc, char* argv[])
       <xsl:call-template name="CapitalizeFirst">
         <xsl:with-param name="string" select="vm:fixname(@member-name)"/>
       </xsl:call-template>
-      <xsl:text>$field:, </xsl:text>
+      <xsl:text>_field:, </xsl:text>
       <xsl:text>_r</xsl:text>
       <xsl:value-of select="@vx"/>
       <xsl:value-of select="$m"/>
