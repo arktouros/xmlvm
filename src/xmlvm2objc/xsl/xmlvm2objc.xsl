@@ -30,7 +30,7 @@
 
 <xsl:param name="pass">emitHeader</xsl:param>
 <xsl:param name="header">default.h</xsl:param>
-<xsl:param name="safeinheritance">true</xsl:param>
+<xsl:param name="safeinheritance">false</xsl:param>
 
 <xsl:output method="text" indent="no"/>
 
