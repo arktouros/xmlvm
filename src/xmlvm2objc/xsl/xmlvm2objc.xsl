@@ -2924,7 +2924,7 @@ int main(int argc, char* argv[])
       <xsl:value-of select="vm:fixname(@class-type)"/>
       <xsl:text>, set</xsl:text>
       <xsl:call-template name="CapitalizeFirst">
-        <xsl:with-param name="string" select="@member-name"/>
+        <xsl:with-param name="string" select="vm:fixname(@member-name)"/>
       </xsl:call-template>
       <xsl:text>$field:, </xsl:text>
       <xsl:text>_r</xsl:text>
@@ -3053,7 +3053,7 @@ int main(int argc, char* argv[])
       <xsl:value-of select="vm:fixname(@class-type)"/>
       <xsl:text>, set</xsl:text>
       <xsl:call-template name="CapitalizeFirst">
-        <xsl:with-param name="string" select="@member-name"/>
+        <xsl:with-param name="string" select="vm:fixname(@member-name)"/>
       </xsl:call-template>
       <xsl:text>$field:, </xsl:text>
       <xsl:text>_r</xsl:text>
