@@ -110,12 +110,9 @@ int main(int argc, char* argv[])
     <xsl:text>
 </xsl:text>
     <xsl:value-of select="if (@isInterface = 'true') then '@protocol ' else '@interface '"/>
-    <xsl:variable name="classname">
-        <xsl:value-of select="vm:fixname(@package)"/>
-        <xsl:text>_</xsl:text>
-        <xsl:value-of select="vm:fixname(@name)"/>
-    </xsl:variable>
-    <xsl:value-of select="$classname" />
+    <xsl:value-of select="vm:fixname(@package)"/>
+    <xsl:text>_</xsl:text>
+    <xsl:value-of select="vm:fixname(@name)"/>
     <xsl:if test="not(@isInterface = 'true')">
       <xsl:text> : </xsl:text>
       <xsl:value-of select="vm:fixname(@extends)"/>
@@ -147,7 +144,7 @@ int main(int argc, char* argv[])
             <xsl:text> </xsl:text>
             <xsl:value-of select="vm:fixname(@name)"/>
             <xsl:text>_</xsl:text>
-            <xsl:value-of select="vm:fixname($classname)"/>
+            <xsl:value-of select="vm:fixname(@type)"/>
             <xsl:text>;
 </xsl:text>
         </xsl:for-each>
@@ -277,12 +274,9 @@ int main(int argc, char* argv[])
 
     <xsl:text>
 @implementation </xsl:text>
-    <xsl:variable name="classname">
-        <xsl:value-of select="vm:fixname(@package)"/>
-        <xsl:text>_</xsl:text>
-        <xsl:value-of select="vm:fixname(@name)"/>
-    </xsl:variable>
-    <xsl:value-of select="$classname" />
+    <xsl:value-of select="vm:fixname(@package)"/>
+    <xsl:text>_</xsl:text>
+    <xsl:value-of select="vm:fixname(@name)"/>
     <xsl:text>;
 
 </xsl:text>
@@ -341,7 +335,7 @@ int main(int argc, char* argv[])
       <xsl:text>    </xsl:text>
       <xsl:value-of select="vm:fixname(@name)"/>
       <xsl:text>_</xsl:text>
-      <xsl:value-of select="vm:fixname($classname)"/>
+      <xsl:value-of select="vm:fixname(@type)"/>
       <xsl:text> = (id) JAVA_NULL;
 </xsl:text>
     </xsl:for-each>
@@ -365,7 +359,7 @@ int main(int argc, char* argv[])
 	  <xsl:text>    [</xsl:text>
       <xsl:value-of select="vm:fixname(@name)"/>
       <xsl:text>_</xsl:text>
-      <xsl:value-of select="vm:fixname($classname)"/>
+      <xsl:value-of select="vm:fixname(@type)"/>
 	  <xsl:text> release];
 </xsl:text>
 	</xsl:for-each>
@@ -438,7 +432,7 @@ int main(int argc, char* argv[])
     <xsl:text>_field = </xsl:text>
     <xsl:value-of select="vm:fixname(@name)"/>
     <xsl:text>_</xsl:text>
-    <xsl:value-of select="vm:fixname($classname)"/>
+    <xsl:value-of select="vm:fixname(@type)"/>
     <xsl:text>;
 
 </xsl:text>
@@ -2841,14 +2835,7 @@ int main(int argc, char* argv[])
       <xsl:text>.o)-></xsl:text>
       <xsl:value-of select="vm:fixname(@member-name)"/>
       <xsl:text>_</xsl:text>
-      <xsl:choose>
-        <xsl:when test="@kind = 'field'">
-          <xsl:value-of select="vm:fixname(@class-type)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="vm:fixname(@member-type)"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="vm:fixname(@member-type)"/>
     </xsl:otherwise>
   </xsl:choose>
   <xsl:text>;
@@ -2890,14 +2877,7 @@ int main(int argc, char* argv[])
       <xsl:text>.o)-></xsl:text>
       <xsl:value-of select="vm:fixname(@member-name)" />
       <xsl:text>_</xsl:text>
-      <xsl:choose>
-        <xsl:when test="@kind = 'field'">
-          <xsl:value-of select="vm:fixname(@class-type)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="vm:fixname(@member-type)"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="vm:fixname(@member-type)"/>
     </xsl:otherwise>
   </xsl:choose>
   <xsl:text>;
@@ -2942,14 +2922,7 @@ int main(int argc, char* argv[])
       <xsl:text>.o)-></xsl:text>
       <xsl:value-of select="vm:fixname(@member-name)"/>
       <xsl:text>_</xsl:text>
-      <xsl:choose>
-        <xsl:when test="@kind = 'field'">
-          <xsl:value-of select="vm:fixname(@class-type)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="vm:fixname(@member-type)"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="vm:fixname(@member-type)"/>
       <xsl:text> = _r</xsl:text>
       <xsl:value-of select="@vx"/>
       <xsl:value-of select="$m"/>
@@ -3020,14 +2993,7 @@ int main(int argc, char* argv[])
       <xsl:text>.o)-></xsl:text>
       <xsl:value-of select="vm:fixname(@member-name)" />
       <xsl:text>_</xsl:text>
-      <xsl:choose>
-        <xsl:when test="@kind = 'field'">
-          <xsl:value-of select="vm:fixname(@class-type)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="vm:fixname(@member-type)"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="vm:fixname(@member-type)"/>
     </xsl:otherwise>
   </xsl:choose>
   <xsl:text> release];
@@ -3071,14 +3037,7 @@ int main(int argc, char* argv[])
       <xsl:text>.o)-></xsl:text>
       <xsl:value-of select="vm:fixname(@member-name)" />
       <xsl:text>_</xsl:text>
-      <xsl:choose>
-        <xsl:when test="@kind = 'field'">
-          <xsl:value-of select="vm:fixname(@class-type)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="vm:fixname(@member-type)"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="vm:fixname(@member-type)"/>
       <xsl:text> = _r</xsl:text>
       <xsl:value-of select="@vx"/>
       <xsl:value-of select="$m"/>
